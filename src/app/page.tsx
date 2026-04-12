@@ -23,10 +23,10 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center gap-1">
-          <p className="text-[11px] tracking-[0.35em] uppercase text-accent/80 font-bold">
+          <p className="text-[11px] tracking-[0.35em] uppercase text-accent/80 font-bold" dir="ltr">
             One of Us?
           </p>
-          <h1 className="text-[52px] leading-none font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-primary-light drop-shadow-[0_0_30px_rgba(139,92,246,0.6)]">
+          <h1 className="text-[52px] leading-tight pb-3 pt-1 font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-primary-light drop-shadow-[0_0_30px_rgba(139,92,246,0.6)]">
             مين الغريب؟
           </h1>
         </div>
