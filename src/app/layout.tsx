@@ -12,6 +12,13 @@ const font = Tajawal({
 export const metadata: Metadata = {
   title: 'مين الغريب؟ | One of Us?',
   description: 'لعبة خداع اجتماعي — اكتشف الغريب قبل أن يفلت!',
+  manifest: '/manifest.json',
+  themeColor: '#8B5CF6',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'الغريب'
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
