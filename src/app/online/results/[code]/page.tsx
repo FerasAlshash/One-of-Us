@@ -54,7 +54,8 @@ export default function OnlineResultsPage() {
     ? players.filter(p => (voteTally[p.id] ?? 0) === maxVotes)
     : [];
 
-  const teamWon = eliminated.some(p => p.role === 'spy');
+  const isTie = eliminated.length > 1;
+  const teamWon = !isTie && eliminated.some(p => p.role === 'spy');
 
   return (
     <div className="flex flex-col flex-1 relative overflow-hidden">
@@ -78,7 +79,11 @@ export default function OnlineResultsPage() {
           {teamWon ? '🎉 فاز الفريق!' : '😈 فاز الغريب!'}
         </h1>
         <p className="text-slate-400 text-sm">
-          {teamWon ? 'تم اكتشاف الغريب!' : 'لم يتمكن الفريق من كشفه'}
+          {teamWon 
+            ? 'تم اكتشاف الغريب بنجاح!' 
+            : isTie 
+              ? 'تشتتت أصوات الفريق ولم يصلوا لأغلبية!' 
+              : 'لم يتمكن الفريق من كشفه'}
         </p>
       </div>
 
