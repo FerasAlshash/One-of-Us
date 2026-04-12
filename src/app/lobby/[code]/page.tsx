@@ -35,6 +35,8 @@ export default function LobbyPage() {
   const [deviceId] = useState(() => getDeviceId());
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState('');
+  const [playerToKick, setPlayerToKick] = useState<Player | null>(null);
+  const [isKicked, setIsKicked] = useState(false);
 
   const isHost = room?.host_id === deviceId;
   const expectedPlayers = room?.settings.playersCount ?? 0;
@@ -71,12 +73,20 @@ export default function LobbyPage() {
       playerChannel = supabase.channel(`lobby-players-${roomData.id}`);
       playerChannel
         .on('postgres_changes', {
-          event: '*', schema: 'public', table: 'players', filter: `room_id=eq.${roomData.id}`,
+          event: '*', schema: 'public', table: 'players'
         }, async () => {
           if (!mounted) return;
           const { data } = await supabase
             .from('players').select('id, name, device_id, role').eq('room_id', roomData.id);
-          if (mounted) setPlayers(data ?? []);
+          
+          if (mounted) {
+            const currentPlayers = data ?? [];
+            setPlayers(currentPlayers);
+            // Kick detection
+            if (currentPlayers.length > 0 && !currentPlayers.some(p => p.device_id === deviceId)) {
+              setIsKicked(true);
+            }
+          }
         })
         .subscribe();
 
@@ -102,7 +112,7 @@ export default function LobbyPage() {
       if (playerChannel) supabase.removeChannel(playerChannel);
       if (roomChannel) supabase.removeChannel(roomChannel);
     };
-  }, [code, router]);
+  }, [code, deviceId, router]);
 
   const handleStart = useCallback(async () => {
     if (!room) return;
@@ -215,6 +225,17 @@ export default function LobbyPage() {
               {p.device_id === deviceId && p.device_id !== room.host_id && (
                 <span className="text-[10px] text-slate-600">أنت</span>
               )}
+              {isHost && p.device_id !== room.host_id && (
+                <button
+                  onClick={() => setPlayerToKick(p)}
+                  className="w-8 h-8 flex-shrink-0 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500/20 active:scale-95 transition-all text-sm pb-0.5"
+                  title="استبعاد اللاعب"
+                >
+                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-red-500 stroke-red-600 mt-0.5" strokeWidth={1}>
+                    <rect x="6" y="3" width="12" height="18" rx="2" />
+                  </svg>
+                </button>
+              )}
             </div>
           ))}
 
@@ -250,6 +271,64 @@ export default function LobbyPage() {
           </div>
         )}
       </div>
+
+      {/* Host Action Modals */}
+
+      {/* 1. Kick Confirmation Modal */}
+      {playerToKick && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass flex flex-col items-center gap-2 rounded-[30px] p-7 w-full max-w-[320px] text-center shadow-2xl shadow-red-900/20 animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-2 animate-bounce">
+              <svg viewBox="0 0 24 24" className="w-8 h-8 fill-red-500 stroke-red-600" strokeWidth={1}>
+                <rect x="5" y="2" width="14" height="20" rx="3" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-black text-white">استبعاد لاعب</h3>
+            <p className="text-slate-300 text-sm mt-1">
+              هل أنت متأكد من رغبتك في استبعاد اللاعب <span className="text-accent font-bold px-1">{playerToKick.name}</span> من الغرفة؟
+            </p>
+            <div className="flex w-full gap-3 mt-6">
+              <button
+                onClick={() => setPlayerToKick(null)}
+                className="flex-1 py-3.5 rounded-[18px] bg-white/5 font-bold text-white hover:bg-white/10 active:scale-95 transition-all"
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={async () => {
+                  const targetId = playerToKick.id;
+                  setPlayerToKick(null);
+                  setPlayers(prev => prev.filter(p => p.id !== targetId)); // تحديث فوري (Optimistic Update)
+                  await supabase.from('players').delete().eq('id', targetId);
+                }}
+                className="flex-1 py-3.5 rounded-[18px] bg-red-500 hover:bg-red-600 font-bold text-white active:scale-95 transition-all shadow-lg shadow-red-500/30"
+              >
+                استبعاد
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. You Got Kicked Modal */}
+      {isKicked && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="glass border border-red-500/30 flex flex-col items-center gap-3 rounded-[30px] p-8 w-full max-w-[320px] text-center shadow-[0_0_50px_rgba(239,68,68,0.2)] animate-in slide-in-from-bottom-10 duration-300">
+            <div className="text-6xl mb-3 drop-shadow-2xl">🚪</div>
+            <h3 className="text-2xl font-black text-white">تم استبعادك</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              يبدو أن المضيف قد اختار إنهاء مشاركتك لهذه الجولة. 
+              نتمنى رؤيتك قريباً!
+            </p>
+            <button
+              onClick={() => router.push('/')}
+              className="w-full py-4 rounded-[20px] bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-400 hover:to-rose-500 font-black text-white text-lg active:scale-95 transition-all shadow-lg shadow-red-500/25"
+            >
+              العودة للرئيسية
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );

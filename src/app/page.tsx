@@ -12,7 +12,7 @@ export default function Home() {
           <div className="absolute inset-0 rounded-full bg-primary/40 blur-2xl scale-110" />
           <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-[0_0_50px_rgba(139,92,246,0.5)]">
             <Image
-              src="/gharib-logo.png"
+              src="/gharib-logo-v2.png"
               alt="الغريب"
               fill
               sizes="112px"

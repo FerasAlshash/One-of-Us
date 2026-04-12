@@ -206,7 +206,7 @@ export default function OnlineRoleRevealPage() {
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full bg-accent/30 blur-3xl scale-150" />
                     <div className="float relative w-32 h-32 rounded-full overflow-hidden shadow-[0_0_60px_rgba(232,121,249,0.5)] border border-accent/30">
-                      <Image src="/gharib-logo.png" alt="الغريب" fill sizes="128px" className="object-cover" />
+                      <Image src="/gharib-logo-v2.png" alt="الغريب" fill sizes="128px" className="object-cover" />
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-1">

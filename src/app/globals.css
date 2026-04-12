@@ -98,4 +98,15 @@
     50%       { transform: translateY(-8px); }
   }
   .float { animation: float 3s ease-in-out infinite; }
+
+  /* ── Float Up animation for falling emojis ── */
+  @keyframes floatUp {
+    0% { transform: translateY(10vh) rotate(0deg); opacity: 0; }
+    5% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+  }
+  .animate-floatUp {
+    animation: floatUp linear infinite;
+  }
 }

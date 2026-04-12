@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { playTick, playAlarm } from '@/lib/audio';
+import FloatingEmojis from '@/components/FloatingEmojis';
 
-type Room = { id: string; status: string; timer_ends_at: string; settings: { timerMinutes: number } };
+type Room = { id: string; status: string; timer_ends_at: string; settings: { timerMinutes: number; category: string } };
 
 function formatTime(seconds: number) {
   const m = Math.floor(Math.max(0, seconds) / 60);
@@ -33,17 +35,32 @@ export default function OnlineTimerPage() {
   // Countdown from server timer_ends_at
   useEffect(() => {
     if (!room?.timer_ends_at) return;
+    let ended = false;
+
     const update = () => {
+      if (ended) return;
       const diff = Math.floor((new Date(room.timer_ends_at).getTime() - Date.now()) / 1000);
       setSeconds(diff);
       setIsDanger(diff <= 30 && diff > 0);
+      
+      // Play tick sound in the final 10 seconds
+      if (diff <= 10 && diff > 0) {
+        playTick();
+      } else if (diff === 0) {
+        playAlarm();
+      }
+
       if (diff <= 0) {
-        // Update room status to voting
-        supabase.from('rooms').update({ status: 'voting' }).eq('id', room.id).then(() => {
-          router.push(`/online/vote/${code}`);
-        });
+        ended = true;
+        // Add a delay to let the alarm finish before pushing if we actually hit zero here
+        setTimeout(() => {
+          supabase.from('rooms').update({ status: 'voting' }).eq('id', room.id).then(() => {
+            router.push(`/online/vote/${code}`);
+          });
+        }, diff === 0 ? 1500 : 0);
       }
     };
+    
     update();
     const interval = setInterval(update, 1000);
     return () => clearInterval(interval);
@@ -71,6 +88,9 @@ export default function OnlineTimerPage() {
 
   return (
     <div className={`flex flex-col flex-1 relative overflow-hidden transition-colors duration-1000`}>
+
+      {/* Floating Emojis Background */}
+      {room && <FloatingEmojis categoryId={room.settings.category} />}
 
       {/* Ambient */}
       <div aria-hidden className="pointer-events-none absolute inset-0">

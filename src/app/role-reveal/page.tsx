@@ -78,7 +78,7 @@ export default function RoleReveal() {
                     <div className="absolute inset-0 rounded-full bg-accent/30 blur-3xl scale-150" />
                     <div className="float relative w-32 h-32 rounded-full overflow-hidden shadow-[0_0_60px_rgba(232,121,249,0.5)] border border-accent/30">
                       <Image
-                        src="/gharib-logo.png"
+                        src="/gharib-logo-v2.png"
                         alt="الغريب"
                         fill
                         sizes="128px"

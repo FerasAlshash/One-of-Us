@@ -115,7 +115,7 @@ export default function OnlineResultsPage() {
         <div className="relative">
           <div className="absolute inset-0 rounded-full bg-accent/30 blur-3xl scale-150" />
           <div className="float relative w-24 h-24 rounded-full overflow-hidden shadow-[0_0_50px_rgba(232,121,249,0.5)] border border-accent/30">
-            <Image src="/gharib-logo.png" alt="الغريب" fill sizes="96px" className="object-cover" />
+            <Image src="/gharib-logo-v2.png" alt="الغريب" fill sizes="96px" className="object-cover" />
           </div>
         </div>
         <p className="text-[11px] uppercase tracking-widest text-slate-500">انكشف السر</p>

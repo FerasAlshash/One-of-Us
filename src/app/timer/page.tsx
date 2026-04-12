@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGame } from '@/context/GameContext';
+import { playTick, playAlarm } from '@/lib/audio';
+import FloatingEmojis from '@/components/FloatingEmojis';
 
 export default function TimerScreen() {
   const router = useRouter();
@@ -14,11 +16,26 @@ export default function TimerScreen() {
   const isDanger = timeLeft <= 30 && timeLeft > 0;
   const isDone   = timeLeft <= 0;
 
+  // 1. Countdown interval
   useEffect(() => {
-    if (isDone) { router.push('/vote'); return; }
+    if (timeLeft <= 0) return;
     const id = setInterval(() => setTimeLeft(t => t - 1), 1000);
     return () => clearInterval(id);
-  }, [isDone, router]);
+  }, [timeLeft]);
+
+  // 2. Audio triggers and Navigation
+  useEffect(() => {
+    if (timeLeft <= 10 && timeLeft > 0) {
+      playTick();
+    } else if (timeLeft === 0) {
+      playAlarm();
+      setTimeout(() => {
+        router.push('/vote');
+      }, 1500);
+    } else if (timeLeft < 0) {
+      router.push('/vote');
+    }
+  }, [timeLeft, router]);
 
   const mins = Math.floor(timeLeft / 60);
   const secs = timeLeft % 60;
@@ -30,6 +47,9 @@ export default function TimerScreen() {
 
   return (
     <div className="flex flex-col flex-1 items-center justify-between px-6 py-14 relative overflow-hidden">
+
+      {/* Floating Emojis Background */}
+      <FloatingEmojis categoryId={state.category} />
 
       {/* Ambient */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
