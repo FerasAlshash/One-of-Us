@@ -1,9 +1,16 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import TutorialModal from '@/components/TutorialModal';
 
 export default function Home() {
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
   return (
     <div className="flex flex-col flex-1 relative overflow-hidden">
+      <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
 
       {/* ── Hero ── */}
       <div className="flex flex-col items-center pt-20 pb-8 px-8">
@@ -94,6 +101,17 @@ export default function Home() {
             <span className="text-2xl">🔗</span>
             <span className="text-sm font-bold text-slate-300">الانضمام</span>
           </Link>
+        </div>
+
+        {/* Tutorial button */}
+        <div className="mt-8 flex justify-center">
+          <button 
+            onClick={() => setIsTutorialOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full glass border border-white/10 text-white/70 hover:text-white hover:bg-white/10 active:scale-95 transition-all text-sm font-bold"
+          >
+            <span>هل هذه أول مرة لك؟ كيف تلعب</span>
+            <span className="text-lg leading-none">💡</span>
+          </button>
         </div>
 
       </div>
