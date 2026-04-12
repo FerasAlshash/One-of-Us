@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# مين الغريب؟ (One of Us?) 🕵️‍♂️🎯
 
-## Getting Started
+لعبة خداع اجتماعي ممتعة وحماسية مستوحاة من لعبة (الجاسوس). تلعبها مع أصدقائك حيث يحاول الجميع اكتشاف من هو "الغريب" الذي لا يعرف الكلمة السرية!
 
-First, run the development server:
+## ✨ المميزات الرئيسية
 
+- **اللعب المحلي (Local Multiplayer):** العب مع أصدقائك باستخدام هاتف واحد يتم تمريره بين اللاعبين.
+- **اللعب عبر الإنترنت (Online Multiplayer):** أنشئ غرفة أونلاين وشارك كود الغرفة المكون من 4 أحرف ليتمكن أصدقاؤك من الدخول من هواتفهم الخاصة (مدعوم بتقنية Supabase Realtime).
+- **قاعدة بيانات ضخمة:** أكثر من 400 كلمة مقسمة إلى 4 فئات ممتعة (أماكن، طعام، مهن، فنانون عرب).
+- **نظام تصويت إلكتروني:** في طور الأونلاين، يقوم كل لاعب بالتصويت من هاتفه ضد من يظن أنه الغريب بصورة سرية ولحظية.
+- **تزامن مثالي:** تصميم قوي يعتمد على نظام (Hybrid Polling + Grouped Channels) لمنع انقطاع اتصال اللاعبين أو ضياع البيانات أثناء اللعب المباشر.
+
+## 🛠️ التقنيات المستخدمة
+
+- **إطار العمل:** Next.js 16 (App Router)
+- **لغة البرمجة:** TypeScript
+- **التصميم:** Tailwind CSS (تصميم يعتمد على Glassmorphism و Animations جذابة)
+- **قاعدة البيانات والتزامن الحي:** Supabase (PostgreSQL + Realtime)
+
+## 🚀 طريقة التشغيل المطورين (Local Development)
+
+1. قم بتحميل المشروع:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/FerasAlshash/One-of-Us.git
+cd One-of-Us
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. تثبيت الحزم المتطردة:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. ربط متغيرات البيئة بإنشاء ملف `.env.local` يحتوي على:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. تشغيل منصة التطوير:
+```bash
+npm run dev
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*تم تطوير هذا المشروع كجزء من أتمتة وتحديثات الذكاء الاصطناعي لتجربة مستخدم مذهلة.*
