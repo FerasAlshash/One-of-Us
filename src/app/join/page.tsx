@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -13,6 +13,17 @@ export default function JoinPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const qCode = params.get('code');
+    if (qCode) {
+      const u = qCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
+      const newCode = ['', '', '', '', ''];
+      for (let i = 0; i < u.length; i++) newCode[i] = u[i];
+      setCode(newCode);
+    }
+  }, []);
 
   const fullCode = code.join('');
 
