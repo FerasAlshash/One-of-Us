@@ -9,11 +9,16 @@ const font = Tajawal({
   display: 'swap',
 });
 
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+  themeColor: '#8B5CF6',
+};
+
 export const metadata: Metadata = {
   title: 'مين الغريب؟ | One of Us?',
   description: 'لعبة خداع اجتماعي — اكتشف الغريب قبل أن يفلت!',
   manifest: '/manifest.json',
-  themeColor: '#8B5CF6',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
