@@ -264,7 +264,7 @@ export default function OnlineRoleRevealPage() {
               disabled={!allReady}
               className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-primary to-primary-hover text-white font-black text-xl glow-primary active:scale-[0.97] transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
             >
-              {allReady ? 'ابدأ المؤقت للجميع ▶' : '⏳ انتظار بقية اللاعبين...'}
+              {allReady ? 'بدء التحقيق 🕵️' : '⏳ انتظار بقية اللاعبين...'}
             </button>
           </div>
         ) : (

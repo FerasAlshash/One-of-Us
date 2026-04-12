@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
+import { getDeviceId } from '@/lib/device-id';
+import { CATEGORIES } from '@/data/words';
 import { supabase } from '@/lib/supabase';
 
 type Player = { id: string; name: string; role: string | null; voted_for: string | null };
 type Room = {
-  id: string; word: string; settings: { category: string; timerMinutes: number };
+  id: string; host_id: string; word: string; settings: { category: string; timerMinutes: number };
 };
 
 const CATEGORY_NAMES: Record<string, string> = {
@@ -21,7 +23,12 @@ export default function OnlineResultsPage() {
 
   const [room, setRoom] = useState<Room | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
+  const [deviceId] = useState(() => getDeviceId());
+  const [restarting, setRestarting] = useState(false);
 
+  const isHost = room?.host_id === deviceId;
+
+  // Fetch initial data
   useEffect(() => {
     const init = async () => {
       const { data: roomData } = await supabase
@@ -35,6 +42,43 @@ export default function OnlineResultsPage() {
     };
     init();
   }, [code, router]);
+
+  // Listen for room reset to go back to Lobby
+  useEffect(() => {
+    if (!room) return;
+    let mounted = true;
+
+    // Realtime channel
+    const channel = supabase.channel(`results-room-${room.id}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rooms', filter: `id=eq.${room.id}` }, (payload) => {
+        if (mounted && payload.new.status === 'waiting') {
+          router.push(`/lobby/${code}`);
+        }
+      }).subscribe();
+
+    // Polling fallback
+    const timer = setInterval(async () => {
+      if (!mounted) return;
+      const { data } = await supabase.from('rooms').select('status').eq('id', room.id).single();
+      if (data?.status === 'waiting' && mounted) router.push(`/lobby/${code}`);
+    }, 2500);
+
+    return () => { mounted = false; clearInterval(timer); supabase.removeChannel(channel); };
+  }, [room, code, router]);
+
+  const handlePlayAgain = async () => {
+    if (!room) return;
+    setRestarting(true);
+
+    const words = CATEGORIES[room.settings.category]?.words ?? [];
+    const newWord = words[Math.floor(Math.random() * words.length)];
+
+    // Reset all players
+    await supabase.from('players').update({ role: null, voted_for: null, is_ready: false }).eq('room_id', room.id);
+
+    // Reset room
+    await supabase.from('rooms').update({ status: 'waiting', word: newWord, timer_ends_at: null }).eq('id', room.id);
+  };
 
   if (!room) {
     return (
@@ -151,18 +195,35 @@ export default function OnlineResultsPage() {
 
         {/* Reset: go back home */}
         <div className="flex flex-col gap-3 mt-1">
-          <button
-            onClick={() => router.push('/create-room')}
-            className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-primary to-primary-hover text-white font-black text-lg glow-primary active:scale-[0.97] transition-transform"
-          >
-            جولة جديدة 🔄
-          </button>
-          <button
-            onClick={() => router.push('/')}
-            className="w-full py-4 rounded-[24px] glass border border-white/10 text-slate-300 font-bold text-base active:scale-[0.97] transition-transform hover:bg-white/5"
-          >
-            القائمة الرئيسية 🏠
-          </button>
+          {isHost ? (
+            <>
+              <button
+                onClick={handlePlayAgain}
+                disabled={restarting}
+                className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-primary to-primary-hover text-white font-black text-lg glow-primary active:scale-[0.97] transition-transform disabled:opacity-50"
+              >
+                {restarting ? 'جاري التجهيز...' : 'جولة جديدة ⚔️'}
+              </button>
+              <button
+                onClick={() => router.push('/create-room')}
+                className="w-full py-4 rounded-[24px] glass border border-white/10 text-slate-300 font-bold text-base active:scale-[0.97] transition-transform hover:bg-white/5"
+              >
+                إنشاء غرفة جديدة 🏠
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="glass rounded-[24px] py-5 px-6 text-center">
+                <p className="text-slate-400 text-sm font-bold">⏳ في انتظار المضيف ليبدأ جولة جديدة...</p>
+              </div>
+              <button
+                onClick={() => router.push('/')}
+                className="w-full py-3 text-sm text-slate-500 hover:text-white transition-colors"
+              >
+                الخروج للقائمة الرئيسية
+              </button>
+            </>
+          )}
         </div>
 
       </div>
