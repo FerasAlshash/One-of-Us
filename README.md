@@ -38,13 +38,22 @@ The application was strategically developed through a structured 5-phase roadmap
 *   Transitioned the single-device local engine into a fully distributed online multiplayer experience.
 *   Provisioned a Supabase PostgreSQL database handling `rooms` and `players` relations.
 *   Developed a frictionless 4-character Room Code joining mechanism.
-*   **Robust Synchronization Engine:** Implemented a fault-tolerant hybrid architecture combining Supabase Realtime WebSockets with intelligent polling fallbacks. This entirely eliminates desynchronization caused by mobile browser tab throttling or Web Extensions overriding React Hydration boundaries.
-*   Engineered a remote electronic voting system with live tallying, preventing self-voting, and driving automatic phase transitions.
+*   **Robust Synchronization Engine:** Implemented a fault-tolerant hybrid architecture combining Supabase Realtime WebSockets with intelligent polling fallbacks. This entirely eliminates desynchronization caused by mobile browser tab throttling.
+*   Engineered a remote electronic voting system with live tallying.
 
-### Phase 5: PWA & Native App Transformation ⬜ (Upcoming)
-*   Integrate Progressive Web App (PWA) capabilities (`manifest.json`, Service Workers) for offline caching and home screen installation.
-*   Deploy to production servers (e.g., Vercel).
-*   Testing and optimizations for native Android/iOS wrappers.
+### Phase 5: PWA, UX Polish & Deployment ✅
+*   **PWA Transformation:** Integrated Progressive Web App capabilities (`manifest.json`, Service Workers) allowing the game to be installed on Android and iOS home screens with a native look and feel.
+*   **Floating Emojis Background:** Dynamic category-specific emoji animations that float upward during the discussion phase.
+*   **Tutorial System:** A polished, carousel-based "How to Play" guide implemented directly on the home screen.
+*   **Host Management:** Added ability for room hosts to politely exclude (kick) players from the lobby with real-time syncing.
+*   **Audio & Haptics:** Integrated immersive sound effects and haptic vibrations for timer alerts and game transitions.
+*   **Production Deployment:** Successfully deployed to Vercel with automated CI/CD and optimized Webpack builds.
+
+## ✨ Key Features
+*   **Bilingual Identity:** Full support for Arabic (Primary) and English (Secondary).
+*   **Real-time Sync:** Smooth multiplayer experience powered by Supabase.
+*   **Modern Aesthetics:** Premium Glassmorphism UI with vibrant ambient animations.
+*   **Privacy-First:** Unique Device ID system to prevent identity conflicts without requiring logins.
 
 ## 📖 Local Development Setup
 
