@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { Vote, Search } from 'lucide-react';
 import { useGame } from '@/context/GameContext';
 
 export default function VotePage() {
@@ -8,37 +9,33 @@ export default function VotePage() {
   const { state } = useGame();
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-between px-6 py-14 relative overflow-hidden">
-
-      {/* Ambient */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] blob-purple opacity-30" />
-        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blob-rose opacity-20" />
-      </div>
+    <div className="flex flex-col flex-1 items-center justify-between px-6 py-12 relative overflow-hidden">
 
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center gap-3 text-center">
-        <div className="float text-7xl">🗳️</div>
-        <h1 className="text-4xl font-black text-white">التصويت</h1>
-        <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
-          انتهى وقت النقاش! صوّتوا الآن بينكم شفهياً على من تعتقدون أنه الغريب
+      <div className="relative z-10 flex flex-col items-center gap-2.5 text-center pt-2">
+        <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-violet-300 shadow-inner">
+          <Vote className="w-8 h-8" />
+        </div>
+        <h1 className="text-2xl font-black text-white">مرحلة التصويت</h1>
+        <p className="text-slate-400 text-xs leading-relaxed max-w-xs">
+          انتهى وقت النقاش! صوّتوا الآن بينكم شفهياً لتحديد من تعتقدون أنه الغريب
         </p>
       </div>
 
       {/* Instructions card */}
-      <div className="relative z-10 w-full glass rounded-[28px] p-6 flex flex-col gap-4">
-        <h3 className="text-white font-black text-base">كيف يعمل التصويت؟</h3>
+      <div className="relative z-10 w-full glass-card rounded-[26px] p-5 flex flex-col gap-3.5">
+        <h3 className="text-white font-bold text-sm">كيفية التصويت السريع:</h3>
         {[
-          { n: '١', text: 'كل لاعب يختار اسم شخص يظن أنه الغريب' },
-          { n: '٢', text: 'بعد العد: ١، ٢، ٣ — الجميع يشير بإصبعه في نفس الوقت' },
-          { n: '٣', text: 'اللاعب الذي يحصل على أكبر عدد أصوات يُقصى' },
-          { n: '٤', text: 'اضغط الزر أدناه لكشف الحقيقة!' },
+          { n: '١', text: 'كل لاعب يحدد في ذهنه الشخص المشتبه به' },
+          { n: '٢', text: 'عند العد: ١.. ٢.. ٣.. يشير الجميع معاً' },
+          { n: '٣', text: 'صاحب أكثر عدد أصوات هو المتهم الرئيسي' },
+          { n: '٤', text: 'اضغط على الزر أدناه لمعرفة هل كشفتم الغريب أم لا!' },
         ].map(step => (
           <div key={step.n} className="flex items-start gap-3">
-            <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span className="text-primary font-black text-xs">{step.n}</span>
+            <div className="w-6 h-6 rounded-lg bg-violet-500/15 border border-violet-500/25 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-violet-300 font-black text-[11px]">{step.n}</span>
             </div>
-            <p className="text-slate-300 text-sm leading-relaxed">{step.text}</p>
+            <p className="text-slate-300 text-xs leading-relaxed">{step.text}</p>
           </div>
         ))}
       </div>
@@ -47,13 +44,13 @@ export default function VotePage() {
       <div className="relative z-10 w-full">
         <button
           onClick={() => router.push('/results')}
-          className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-accent to-accent-hover text-white font-black text-xl glow-accent active:scale-[0.97] transition-transform"
-          style={{ color: '#fff' }}
+          className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform"
         >
-          اكشف الحقيقة! 🔍
+          <Search className="w-4 h-4" />
+          <span>كشف النتائج والأدوار</span>
         </button>
-        <p className="text-center text-slate-600 text-xs mt-3">
-          {state.playersCount} لاعب · {state.spiesCount} غريب
+        <p className="text-center text-slate-500 text-[11px] mt-2.5">
+          {state.playersCount} لاعبين · {state.spiesCount} غريب
         </p>
       </div>
 

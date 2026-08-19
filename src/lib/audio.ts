@@ -5,7 +5,7 @@ let audioCtx: AudioContext | null = null;
 function getAudioContext() {
   if (typeof window === 'undefined') return null;
   if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     if (AudioContextClass) {
       audioCtx = new AudioContextClass();
     }
@@ -43,7 +43,7 @@ export function playTick() {
     if (navigator.vibrate) {
       navigator.vibrate(20);
     }
-  } catch (e) {
+  } catch {
     // Ignore silently if blocked
   }
 }
@@ -82,7 +82,7 @@ export function playAlarm() {
     if (navigator.vibrate) {
       navigator.vibrate([200, 100, 200, 100, 400]);
     }
-  } catch (e) {
+  } catch {
     // Ignore silently if blocked
   }
 }

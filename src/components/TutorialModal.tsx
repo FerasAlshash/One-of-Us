@@ -1,28 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import { X, UserCheck, Target, Hourglass, Vote, Check, ArrowLeft } from 'lucide-react';
 
 const TUTORIAL_SLIDES = [
   {
-    title: 'القصة باختصار 🕵️',
-    description: 'أنتم مجموعة في رحلة أو جلسة، ولديكم جميعاً نفس "الكلمة السرية"... ما عدا شخص واحد بينكم سيستلم رسالة "أنت الغريب" ولن يعرف ما هي الكلمة!',
-    icon: '🔮'
+    title: 'القصة باختصار',
+    description: 'أنتم مجموعة في جلسة واحدة، ولديكم جميعاً نفس "الكلمة السرية"... ما عدا شخص واحد بينكم سيستلم دور "الغريب" ولن يعرف ما هي الكلمة!',
+    icon: UserCheck,
+    badge: 'الأدوار'
   },
   {
-    title: 'الهدف من اللعبة 🎯',
-    description: 'إذا كنت تملك الكلمة السرية: هدفك كشف الغريب وطرح أسئلة غير واضحة جداً. أما إذا كنت الغريب: هدفك الاندماج، تمييع إجاباتك، ومحاولة استنتاج الكلمة!',
-    icon: '🎭'
+    title: 'الهدف من اللعبة',
+    description: 'إذا كنت تملك الكلمة: هدفك كشف الغريب وطرح تلميحات ذكية. أما إذا كنت الغريب: هدفك الاندماج وتخمين الكلمة دون أن تُكشف!',
+    icon: Target,
+    badge: 'الذكاء'
   },
   {
-    title: 'وقت النقاش ⏳',
-    description: 'بمجرد كشف الأدوار يبدأ توقيت النقاش الحرج. لا تقل الكلمة أبداً، بل صفها بذكاء! الغريب سيعتمد على ردودكم ليخمن الكلمة بأقرب شكل.',
-    icon: '🗣️'
+    title: 'وقت النقاش',
+    description: 'يبدأ توقيت النقاش الحرج. صف الكلمة بذكاء دون ذكرها صراحة! الغريب سيعتمد على إجاباتكم ليخمن الكلمة ويتظاهر بمعرفتها.',
+    icon: Hourglass,
+    badge: 'التحدي'
   },
   {
-    title: 'التصويت الحاسم 🗳️',
-    description: 'عند انتهاء الوقت.. كل لاعب سيشير لمن يظن أنه الغريب. الغريب يربح إذا هرب من التصويت، والاعبون يربحون إذا تم كشفه بنجاح!',
-    icon: '⚖️'
+    title: 'التصويت الحاسم',
+    description: 'عند انتهاء الوقت، يصوت الجميع للإشارة إلى الغريب. يفوز الغريب إذا أفلت من التصويت، ويفوز البقية إذا تم كشفه بنجاح!',
+    icon: Vote,
+    badge: 'النتيجة'
   }
 ];
 
@@ -41,7 +45,6 @@ export default function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
       setCurrentSlide(prev => prev + 1);
     } else {
       onClose();
-      // Reset slide after closing to start fresh next time
       setTimeout(() => setCurrentSlide(0), 300);
     }
   };
@@ -53,66 +56,66 @@ export default function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
   };
 
   const slide = TUTORIAL_SLIDES[currentSlide];
+  const IconComponent = slide.icon;
   const isLast = currentSlide === TUTORIAL_SLIDES.length - 1;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-5">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-sm glass rounded-[36px] overflow-hidden flex flex-col shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-        
-        {/* Glow ambient background inside modal */}
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 blob-purple opacity-30 pointer-events-none" />
+      <div className="relative z-10 w-full max-w-sm glass-card rounded-[32px] overflow-hidden flex flex-col border border-white/10 shadow-[0_24px_50px_rgba(0,0,0,0.6)] animate-in fade-in zoom-in-95 duration-200">
 
         {/* Close button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 left-4 p-2 text-white/50 hover:text-white/80 transition-colors z-20 bg-white/5 rounded-full"
+          className="absolute top-4 left-4 p-2 text-slate-400 hover:text-white transition-colors z-20 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] rounded-full"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="w-4 h-4" />
         </button>
 
         {/* Content */}
-        <div className="pt-14 pb-8 px-8 flex flex-col items-center text-center relative z-10 min-h-[340px] justify-between">
+        <div className="pt-12 pb-7 px-7 flex flex-col items-center text-center relative z-10 min-h-[360px] justify-between">
           
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-20 h-20 rounded-full glass flex items-center justify-center bg-white/5 shadow-inner">
-              <span className="text-5xl drop-shadow-md">{slide.icon}</span>
+          <div className="flex flex-col items-center gap-3.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold">
+              {slide.badge}
+            </span>
+
+            <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-violet-300 shadow-inner">
+              <IconComponent className="w-8 h-8" />
             </div>
             
-            <h3 className="text-2xl font-black text-white">{slide.title}</h3>
+            <h3 className="text-xl font-black text-white">{slide.title}</h3>
             
-            <p className="text-slate-300 text-sm leading-relaxed max-w-[250px]">
+            <p className="text-slate-300 text-xs leading-relaxed max-w-[260px]">
               {slide.description}
             </p>
           </div>
 
-          <div className="flex flex-col w-full gap-5 mt-8">
+          <div className="flex flex-col w-full gap-4 mt-6">
             {/* Dots */}
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-1.5">
               {TUTORIAL_SLIDES.map((_, i) => (
                 <div 
                   key={i}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === currentSlide ? 'w-6 bg-primary' : 'w-2 bg-white/20'
+                    i === currentSlide ? 'w-5 bg-violet-500' : 'w-1.5 bg-white/20'
                   }`}
                 />
               ))}
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-2.5">
               {currentSlide > 0 && (
                 <button 
                   onClick={prevSlide}
-                  className="px-5 py-3 rounded-2xl glass text-white font-bold active:scale-95 transition-all outline-none focus:ring-2 focus:ring-primary/50"
+                  className="px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 font-bold text-xs active:scale-95 transition-all"
                 >
                   السابق
                 </button>
@@ -120,11 +123,23 @@ export default function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
               
               <button 
                 onClick={nextSlide}
-                className={`flex-1 py-3 rounded-2xl text-white font-black active:scale-95 transition-all outline-none focus:ring-2 focus:ring-primary/50
-                  ${isLast ? 'bg-gradient-to-r from-green-500 to-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]' 
-                           : 'bg-primary shadow-lg'}`}
+                className={`flex-1 py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-1.5 active:scale-98 transition-all ${
+                  isLast 
+                    ? 'bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/30' 
+                    : 'btn-primary'
+                }`}
               >
-                {isLast ? 'جاهز للعب! 🚀' : 'التالي →'}
+                {isLast ? (
+                  <>
+                    <span>جاهز للعب!</span>
+                    <Check className="w-4 h-4 mr-1" />
+                  </>
+                ) : (
+                  <>
+                    <span>التالي</span>
+                    <ArrowLeft className="w-4 h-4 mr-1" />
+                  </>
+                )}
               </button>
             </div>
           </div>

@@ -98,41 +98,43 @@ export default function OnlineTimerPage() {
       </div>
 
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center pt-16 pb-6 gap-1 text-center">
-        <p className="text-[11px] uppercase tracking-widest text-slate-500">وقت النقاش</p>
-        <h1 className="text-2xl font-black text-white">ناقشوا واكشفوا الغريب!</h1>
+      {/* Header */}
+      <div className="relative z-10 flex flex-col items-center pt-12 pb-4 gap-1 text-center">
+        <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">وقت النقاش المباشر</span>
+        <h1 className="text-xl font-black text-white">ناقشوا واكشفوا الغريب!</h1>
       </div>
 
       {/* Timer circle */}
       <div className="relative z-10 flex-1 flex items-center justify-center">
         <div className="relative">
-          {isDanger && <div className="absolute inset-0 rounded-full blur-3xl bg-accent/25 scale-110" />}
           <svg width="220" height="220" className="-rotate-90">
-            <circle cx="110" cy="110" r="90" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+            <circle cx="110" cy="110" r="90" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
             <circle
               cx="110" cy="110" r="90" fill="none"
-              stroke={isDanger ? '#e879f9' : '#8b5cf6'}
+              stroke={isDanger ? '#F43F5E' : '#7C3AED'}
               strokeWidth="8" strokeLinecap="round"
               strokeDasharray={`${strokeDash} ${circumference}`}
-              className="transition-all duration-1000"
+              style={{ transition: 'stroke-dasharray 1s linear, stroke 0.5s ease' }}
             />
           </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-            <span className={`text-6xl font-black tabular-nums transition-colors duration-500 ${isDanger ? 'text-accent' : 'text-white'}`}>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
+            <span className={`text-5xl font-black tabular-nums transition-colors duration-500 font-mono tracking-tight ${isDanger ? 'text-rose-400' : 'text-white'}`}>
               {formatTime(seconds)}
             </span>
-            <span className="text-slate-500 text-xs uppercase tracking-widest">متبقي</span>
+            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+              {isDanger ? 'ينتهي قريباً' : 'متبقي'}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Bottom hint */}
-      <div className="relative z-10 px-6 pb-14 flex flex-col gap-3">
-        <div className="glass rounded-[24px] py-4 px-5 text-center">
-          <p className="text-slate-400 text-sm">📢 ناقشوا بينكم — من هو الغريب في المجموعة؟</p>
+      <div className="relative z-10 px-6 pb-10 flex flex-col gap-2">
+        <div className="glass-card rounded-[20px] py-3 px-5 text-center">
+          <p className="text-slate-300 text-xs font-medium">ناقشوا بهدوء وذكاء — لا تكشفوا الكلمة صراحة</p>
         </div>
-        <p className="text-center text-slate-600 text-xs">
-          ستنتقلون تلقائياً لصفحة التصويت عند انتهاء الوقت
+        <p className="text-center text-slate-500 text-[11px]">
+          الانتقال التلقائي لصفحة التصويت فور انتهاء العداد
         </p>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
+import { Eye, Lock, KeyRound, ArrowLeft, Check } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { getDeviceId } from '@/lib/device-id';
 
@@ -28,7 +29,6 @@ export default function OnlineRoleRevealPage() {
 
   useEffect(() => {
     let mounted = true;
-    let playerChannel: ReturnType<typeof supabase.channel> | null = null;
     let roomChannel: ReturnType<typeof supabase.channel> | null = null;
     let pollInterval: NodeJS.Timeout | null = null;
 
@@ -71,12 +71,11 @@ export default function OnlineRoleRevealPage() {
       setLoading(false);
 
       // Realtime subscription (grouped)
-      const channel = supabase.channel(`reveal-${roomData.id}`)
+      roomChannel = supabase.channel(`reveal-${roomData.id}`)
         .on('postgres_changes', {
           event: '*', schema: 'public', table: 'players'
-        }, async (payload) => {
+        }, async () => {
           if (!mounted) return;
-          // We removed the room_id filter because of REPLICA IDENTITY limitations.
           // Just re-fetch players for this room on ANY player change.
           const { data } = await supabase.from('players').select('*').eq('room_id', roomData.id);
           if (mounted) setPlayers(data ?? []);
@@ -171,63 +170,52 @@ export default function OnlineRoleRevealPage() {
   return (
     <div className="flex flex-col flex-1 relative overflow-hidden">
 
-      {/* Ambient */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blob-purple opacity-35" />
-      </div>
-
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center py-10 px-8 gap-1">
-        <p className="text-[11px] tracking-[0.25em] uppercase text-slate-500">دورك في اللعبة</p>
-        <p className="text-base font-bold text-white">{myPlayer?.name ?? '...'}</p>
+      <div className="relative z-10 flex flex-col items-center pt-12 pb-3 px-8 gap-1">
+        <span className="text-[10px] tracking-[0.2em] uppercase text-slate-400 font-bold">دورك في اللعبة</span>
+        <p className="text-lg font-black text-white">{myPlayer?.name ?? '...'}</p>
       </div>
 
       {/* Card */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 gap-6">
-        <div className="glass rounded-[36px] w-full px-8 py-12 flex flex-col items-center gap-6 relative overflow-hidden">
-          <div className="absolute top-0 inset-x-8 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 gap-5">
+        <div className="glass-card rounded-[32px] w-full px-7 py-10 flex flex-col items-center gap-5 relative overflow-hidden border border-white/10 shadow-[0_16px_36px_rgba(0,0,0,0.5)]">
 
           {!revealed ? (
-            <div className="flex flex-col items-center gap-6 text-center">
-              <div className="pulse-ring w-20 h-20 rounded-full glass flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-10 h-10 text-slate-400">
-                  <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" />
-                </svg>
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-slate-300 shadow-inner">
+                <Lock className="w-7 h-7" />
               </div>
               <div>
-                <p className="text-xl font-bold text-white mb-2">الشاشة مخفية</p>
-                <p className="text-slate-500 text-sm leading-relaxed">تأكد أن أحداً لا ينظر، ثم اضغط لكشف دورك</p>
+                <p className="text-lg font-bold text-white mb-1.5">الشاشة مخفية</p>
+                <p className="text-slate-400 text-xs leading-relaxed max-w-[220px]">تأكد أن أحداً لا ينظر، ثم اضغط لكشف دورك</p>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-5 text-center w-full">
+            <div className="flex flex-col items-center gap-4 text-center w-full">
               {isSpy ? (
                 <>
-                  <div className="relative">
-                    <div className="absolute inset-0 rounded-full bg-accent/30 blur-3xl scale-150" />
-                    <div className="float relative w-32 h-32 rounded-full overflow-hidden shadow-[0_0_60px_rgba(232,121,249,0.5)] border border-accent/30">
-                      <Image src="/gharib-logo-v2.png" alt="الغريب" fill sizes="128px" className="object-cover" />
-                    </div>
+                  <div className="float relative w-28 h-28 rounded-full overflow-hidden border-2 border-rose-500/30 shadow-[0_10px_28px_rgba(0,0,0,0.6)]">
+                    <Image src="/gharib-logo-v2.png" alt="الغريب" fill sizes="112px" className="object-cover rounded-full" priority />
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <p className="text-[13px] tracking-[0.3em] uppercase text-slate-500">تحذير سري</p>
-                    <p className="text-5xl font-black text-white" style={{ textShadow: '0 0 40px rgba(232,121,249,0.5)' }}>
-                      أنت الغريب
-                    </p>
+                    <span className="text-[11px] tracking-[0.2em] uppercase text-rose-300 font-bold">تحذير سري</span>
+                    <p className="text-3xl font-black text-white">أنت الغريب</p>
                   </div>
-                  <div className="glass rounded-2xl px-5 py-3 text-sm text-slate-400 leading-relaxed max-w-xs text-center">
-                    استمع للنقاش 👂 اكتسب المعلومات، ولا تكشف نفسك أبداً
+                  <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-2.5 text-xs text-slate-300 leading-relaxed max-w-xs text-center">
+                    استمع للنقاش بذكاء، وخمن الكلمة دون أن تُكشف
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="float text-5xl">🎯</div>
-                  <div>
-                    <p className="text-[11px] uppercase tracking-widest text-slate-500 mb-2">الكلمة السرية</p>
-                    <p className="text-4xl font-black text-white">{room?.word}</p>
+                  <div className="w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-300">
+                    <KeyRound className="w-7 h-7" />
                   </div>
-                  <div className="glass rounded-2xl px-5 py-3 text-sm text-slate-400 leading-relaxed max-w-xs">
-                    تحدث بذكاء 🧠 ساعد فريقك في كشف الغريب
+                  <div>
+                    <span className="text-[11px] uppercase tracking-widest text-slate-400 font-bold block mb-1">الكلمة السرية</span>
+                    <p className="text-3xl font-black text-white">{room?.word}</p>
+                  </div>
+                  <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-2.5 text-xs text-slate-300 leading-relaxed max-w-xs">
+                    تحدث بذكاء مع اللاعبين لمساعدتهم في كشف الغريب
                   </div>
                 </>
               )}
@@ -239,46 +227,49 @@ export default function OnlineRoleRevealPage() {
         {!revealed ? (
           <button
             onClick={() => setRevealed(true)}
-            className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-primary to-primary-hover text-white font-black text-xl glow-primary active:scale-[0.97] transition-transform"
+            className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform"
           >
-            اكشف دورك 👁
+            <Eye className="w-4 h-4" />
+            <span>اكشف دورك الآن</span>
           </button>
         ) : !ready ? (
           <button
             onClick={handleReady}
-            className="w-full py-5 rounded-[24px] glass border border-white/10 text-white font-bold text-lg active:scale-[0.97] transition-transform hover:bg-white/6"
+            className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/30 text-white font-bold text-base flex items-center justify-center gap-2 active:scale-98 transition-all"
           >
-            جاهز ✅
+            <span>أنا جاهز</span>
+            <Check className="w-4 h-4 mr-1" />
           </button>
         ) : isHost ? (
           /* Host sees the start button — active only when ALL players are ready */
-          <div className="w-full flex flex-col gap-3">
-            <div className="glass rounded-2xl px-4 py-2 flex items-center justify-between text-sm">
+          <div className="w-full flex flex-col gap-2.5">
+            <div className="glass-card rounded-xl px-4 py-2 flex items-center justify-between text-xs font-bold">
               <span className="text-slate-400">اللاعبون الجاهزون</span>
-              <span className={`font-black tabular-nums ${allReady ? 'text-green-400' : 'text-primary-light'}`}>
+              <span className={`tabular-nums ${allReady ? 'text-emerald-400' : 'text-violet-300'}`}>
                 {readyCount} / {totalPlayers}
               </span>
             </div>
             <button
               onClick={handleStartTimer}
               disabled={!allReady}
-              className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-primary to-primary-hover text-white font-black text-xl glow-primary active:scale-[0.97] transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+              className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {allReady ? 'بدء التحقيق 🕵️' : '⏳ انتظار بقية اللاعبين...'}
+              <span>{allReady ? 'بدء وقت النقاش' : 'في انتظار بقية اللاعبين...'}</span>
+              {allReady && <ArrowLeft className="w-4 h-4" />}
             </button>
           </div>
         ) : (
           /* Non-host players just see a waiting indicator */
-          <div className="glass rounded-[24px] py-4 px-6 text-center space-y-2">
-            <p className="text-slate-400 text-sm italic">⏳ في انتظار المضيف ليبدأ...</p>
-            <p className="text-primary-light text-xs font-bold">
+          <div className="glass-card rounded-2xl py-3.5 px-5 text-center space-y-1">
+            <p className="text-slate-400 text-xs font-medium">في انتظار المستضيف لبدء النقاش...</p>
+            <p className="text-violet-300 text-xs font-bold">
               ({readyCount} / {totalPlayers}) جاهزون
             </p>
           </div>
         )}
       </div>
 
-      <div className="h-10" />
+      <div className="h-6" />
     </div>
   );
 }

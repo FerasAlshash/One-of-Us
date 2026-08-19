@@ -1,29 +1,31 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowRight, LogIn, KeyRound, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { getDeviceId } from '@/lib/device-id';
 
 export default function JoinPage() {
   const router = useRouter();
-  const [code, setCode] = useState(['', '', '', '', '']);
+  const [code, setCode] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const qCode = params.get('code');
+      if (qCode) {
+        const u = qCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
+        const initial = ['', '', '', '', ''];
+        for (let i = 0; i < u.length; i++) initial[i] = u[i];
+        return initial;
+      }
+    }
+    return ['', '', '', '', ''];
+  });
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const qCode = params.get('code');
-    if (qCode) {
-      const u = qCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
-      const newCode = ['', '', '', '', ''];
-      for (let i = 0; i < u.length; i++) newCode[i] = u[i];
-      setCode(newCode);
-    }
-  }, []);
 
   const fullCode = code.join('');
 
@@ -42,8 +44,8 @@ export default function JoinPage() {
   };
 
   const handleJoin = async () => {
-    if (!name.trim()) { setError('أدخل اسمك أولاً'); return; }
-    if (fullCode.length !== 5) { setError('الكود يجب أن يكون 5 أحرف'); return; }
+    if (!name.trim()) { setError('يرجى إدخال اسمك أولاً'); return; }
+    if (fullCode.length !== 5) { setError('كود الغرفة يتكون من 5 خانات'); return; }
 
     setLoading(true);
     setError('');
@@ -57,13 +59,13 @@ export default function JoinPage() {
       .single();
 
     if (roomErr || !room) {
-      setError('الغرفة غير موجودة، تحقق من الكود');
+      setError('الغرفة غير موجودة، يرجى التأكد من الكود');
       setLoading(false);
       return;
     }
 
     if (room.status !== 'waiting') {
-      setError('اللعبة بدأت بالفعل، لا يمكن الانضمام');
+      setError('اللعبة بدأت بالفعل في هذه الغرفة');
       setLoading(false);
       return;
     }
@@ -76,7 +78,7 @@ export default function JoinPage() {
 
     const maxPlayers = room.settings?.playersCount ?? 12;
     if ((count ?? 0) >= maxPlayers) {
-      setError('الغرفة ممتلئة');
+      setError('الغرفة ممتلئة بالكامل');
       setLoading(false);
       return;
     }
@@ -90,7 +92,7 @@ export default function JoinPage() {
       );
 
     if (insertErr) {
-      setError('حدث خطأ أثناء الانضمام');
+      setError('حدث خطأ أثناء الانضمام للغرفة');
       setLoading(false);
       return;
     }
@@ -101,31 +103,26 @@ export default function JoinPage() {
   return (
     <div className="flex flex-col flex-1 relative overflow-hidden">
 
-      {/* Ambient */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] blob-purple opacity-30" />
-        <div className="absolute -bottom-20 right-0 w-[300px] h-[300px] blob-rose opacity-20" />
-      </div>
-
       {/* Header */}
-      <div className="relative z-10 flex items-center justify-between px-5 pt-14 pb-5">
+      <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-4">
         <Link href="/"
-          className="w-10 h-10 rounded-[14px] glass flex items-center justify-center text-slate-400 hover:text-white active:scale-90 transition-all"
+          className="w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition-all"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-            <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <ArrowRight className="w-4 h-4" />
         </Link>
-        <h1 className="text-lg font-black tracking-wide text-white">الانضمام لغرفة</h1>
-        <div className="w-10" />
+        <h1 className="text-base font-black tracking-wide text-white">الانضمام لغرفة</h1>
+        <div className="w-9" />
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col px-6 gap-8 pt-4 pb-10">
+      <div className="relative z-10 flex-1 flex flex-col px-6 gap-6 pt-4 pb-8">
 
         {/* Code input */}
-        <div className="flex flex-col gap-3">
-          <p className="text-slate-400 text-sm text-center">أدخل كود الغرفة</p>
-          <div className="flex gap-2 justify-center" dir="ltr">
+        <div className="glass-card rounded-[24px] p-5 flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2 text-violet-300 text-xs font-bold">
+            <KeyRound className="w-4 h-4" />
+            <span>أدخل كود الغرفة (5 خانات)</span>
+          </div>
+          <div className="flex gap-2 justify-center w-full mt-1" dir="ltr">
             {code.map((char, i) => (
               <input
                 key={i}
@@ -135,36 +132,46 @@ export default function JoinPage() {
                 onKeyDown={e => handleKeyDown(e, i)}
                 maxLength={1}
                 inputMode="text"
-                className="w-14 h-16 rounded-[18px] glass border border-white/10 text-center text-2xl font-black text-white caret-primary focus:border-primary/60 focus:bg-primary/5 outline-none transition-all uppercase"
+                className="w-12 h-14 rounded-xl bg-white/[0.04] border border-white/[0.1] text-center text-xl font-black text-white focus:border-violet-500/60 focus:bg-violet-500/10 outline-none transition-all uppercase"
               />
             ))}
           </div>
         </div>
 
         {/* Name input */}
-        <div className="flex flex-col gap-2">
-          <p className="text-slate-400 text-sm">اسمك في اللعبة</p>
+        <div className="glass-card rounded-[24px] p-5 flex flex-col gap-2.5">
+          <div className="flex items-center gap-2 text-slate-300 text-xs font-bold">
+            <User className="w-4 h-4 text-violet-300" />
+            <span>اسمك المستعار في اللعبة</span>
+          </div>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleJoin()}
-            placeholder="مثال: أبو خالد 😄"
+            placeholder="مثال: أحمد"
             maxLength={20}
-            className="w-full px-5 py-4 rounded-[20px] glass border border-white/10 text-white placeholder-slate-600 text-base font-bold focus:border-primary/50 focus:bg-primary/5 outline-none transition-all"
+            className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white placeholder-slate-500 text-sm font-semibold focus:border-violet-500/50 outline-none transition-all"
           />
         </div>
 
         {error && (
-          <p className="text-center text-red-400 text-sm bg-red-500/10 rounded-2xl px-4 py-3">{error}</p>
+          <p className="text-center text-rose-300 text-xs bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-2.5">{error}</p>
         )}
 
         <div className="mt-auto">
           <button
             onClick={handleJoin}
             disabled={loading || fullCode.length !== 5 || !name.trim()}
-            className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-accent to-accent-hover text-white font-black text-xl glow-accent active:scale-[0.97] transition-transform disabled:opacity-40"
+            className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform disabled:opacity-40"
           >
-            {loading ? 'جاري الانضمام...' : 'انضم! 🔗'}
+            {loading ? (
+              <span>جاري الانضمام...</span>
+            ) : (
+              <>
+                <span>الدخول إلى الغرفة</span>
+                <LogIn className="w-4 h-4 mr-1" />
+              </>
+            )}
           </button>
         </div>
 

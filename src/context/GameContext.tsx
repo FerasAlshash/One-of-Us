@@ -50,7 +50,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const startGame = () => {
     const word = getRandomWord(state.category);
 
-    let newRoles = Array(state.playersCount).fill("player");
+    const newRoles = Array(state.playersCount).fill("player");
     for (let i = 0; i < state.spiesCount; i++) {
       newRoles[i] = "spy";
     }

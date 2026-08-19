@@ -12,9 +12,8 @@ export default function TimerScreen() {
   const total = state.timerMinutes * 60;
   const [timeLeft, setTimeLeft] = useState(total);
 
-  const pct     = timeLeft / total;
+  const pct = timeLeft / total;
   const isDanger = timeLeft <= 30 && timeLeft > 0;
-  const isDone   = timeLeft <= 0;
 
   // 1. Countdown interval
   useEffect(() => {
@@ -64,29 +63,26 @@ export default function TimerScreen() {
 
       {/* Circular timer */}
       <div className="relative z-10 flex items-center justify-center">
-        {/* Outer glow */}
-        <div className={`absolute inset-0 rounded-full blur-2xl transition-all duration-1000 scale-75 ${isDanger ? 'bg-accent/25' : 'bg-primary/20'}`} />
-
-        <svg width="180" height="180" className="-rotate-90">
+        <svg width="200" height="200" className="-rotate-90">
           {/* Track */}
-          <circle cx="90" cy="90" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
+          <circle cx="100" cy="100" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
           {/* Progress */}
           <circle
-            cx="90" cy="90" r={R} fill="none"
-            stroke={isDanger ? '#E879F9' : '#8B5CF6'}
+            cx="100" cy="100" r={R} fill="none"
+            stroke={isDanger ? '#F43F5E' : '#7C3AED'}
             strokeWidth="8"
             strokeLinecap="round"
             strokeDasharray={`${dash} ${C}`}
-            style={{ filter: `drop-shadow(0 0 ${isDanger ? '8px #E879F9' : '6px #8B5CF6'})`, transition: 'stroke-dasharray 1s linear, stroke 0.5s ease' }}
+            style={{ transition: 'stroke-dasharray 1s linear, stroke 0.5s ease' }}
           />
         </svg>
 
         {/* Centre text */}
         <div className="absolute flex flex-col items-center gap-1">
-          <p className={`text-5xl font-black font-mono tracking-tighter transition-colors duration-700 ${isDanger ? 'text-accent' : 'text-white'}`}>
+          <p className={`text-4xl font-black font-mono tracking-tight transition-colors duration-500 ${isDanger ? 'text-rose-400' : 'text-white'}`}>
             {String(mins).padStart(2,'0')}:{String(secs).padStart(2,'0')}
           </p>
-          {isDanger && <p className="text-[11px] text-accent/80 uppercase tracking-widest animate-pulse">ينتهي قريباً!</p>}
+          {isDanger && <span className="text-[10px] text-rose-400 font-bold uppercase tracking-wider">ينتهي قريباً</span>}
         </div>
       </div>
 
@@ -94,9 +90,9 @@ export default function TimerScreen() {
       <div className="relative z-10 w-full flex flex-col gap-3">
         <button
           onClick={() => router.push('/vote')}
-          className="shimmer w-full py-5 rounded-[24px] bg-gradient-to-r from-primary to-primary-hover text-white font-black text-lg glow-primary active:scale-[0.97] transition-transform"
+          className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base transition-transform"
         >
-          انتهى النقاش — التصويت الآن 🗳️
+          انتهى النقاش — الانتقال للتصويت
         </button>
       </div>
 

@@ -28,17 +28,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body suppressHydrationWarning className={`${font.className} bg-[#07080F] text-slate-100 min-h-screen overflow-x-hidden antialiased`}>
 
         {/* ── Global ambient layer ── */}
         <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
           {/* Primary violet blob — top right */}
-          <div className="absolute -top-48 -right-48 w-[700px] h-[700px] blob-purple opacity-70" />
+          <div className="absolute -top-48 -right-48 w-[600px] h-[600px] blob-purple opacity-40" />
           {/* Rose blob — bottom left */}
-          <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] blob-rose opacity-60" />
+          <div className="absolute -bottom-32 -left-32 w-[450px] h-[450px] blob-rose opacity-30" />
           {/* Indigo blob — centre */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blob-indigo opacity-30" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] blob-indigo opacity-20" />
         </div>
 
         {/* ── Phone frame ── */}
