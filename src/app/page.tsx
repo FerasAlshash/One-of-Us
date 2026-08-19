@@ -29,14 +29,20 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-1.5">
-          <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[10px] tracking-[0.25em] uppercase text-violet-300 font-bold" dir="ltr">
-            One of Us?
-          </span>
-          <h1 className="text-4xl font-black text-white tracking-tight pt-1">
-            مين الغريب؟
+        <div className="flex flex-col items-center gap-2 text-center">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[10px] tracking-[0.25em] uppercase text-violet-300 font-bold" dir="ltr">
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+            <span>One of Us?</span>
+          </div>
+          
+          <h1 className="text-4xl font-black tracking-tight pt-1 leading-tight select-none">
+            <span className="text-white drop-shadow-sm">مِـيـن </span>
+            <span className="bg-gradient-to-b from-white via-violet-200 to-violet-400 bg-clip-text text-transparent drop-shadow-sm">
+              الـغَـرِيـب؟
+            </span>
           </h1>
-          <p className="text-xs text-slate-400 font-medium">لعبة الخصم والذكاء الجماعي</p>
+          
+          <p className="text-xs text-slate-400 font-medium tracking-wide">لعبة الخداع والذكاء الجماعي</p>
         </div>
       </div>
 

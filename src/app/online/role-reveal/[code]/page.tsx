@@ -116,8 +116,6 @@ export default function OnlineRoleRevealPage() {
           setPlayers(latestPlayers);
         }
       }, 2500);
-
-      roomChannel = channel; // Using roomChannel variable to store the single grouped channel
     };
 
     init();
