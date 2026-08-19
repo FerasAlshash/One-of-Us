@@ -45,7 +45,7 @@ export default function TimerScreen() {
   const dash = C * pct;
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-between px-6 py-14 relative overflow-hidden">
+    <div className="flex flex-col flex-1 h-full min-h-0 items-center justify-between px-5 sm:px-6 pt-6 sm:pt-10 pb-4 sm:pb-6 safe-top safe-bottom relative overflow-hidden">
 
       {/* Floating Emojis Background */}
       <FloatingEmojis categoryId={state.category} />
@@ -56,19 +56,19 @@ export default function TimerScreen() {
       </div>
 
       {/* Title */}
-      <div className="relative z-10 flex flex-col items-center gap-2 text-center">
-        <h2 className="text-3xl font-black text-white">وقت النقاش</h2>
-        <p className="text-slate-500 text-sm">ناقشوا.. مين هو الغريب؟</p>
+      <div className="relative z-10 flex flex-col items-center gap-1.5 text-center">
+        <h2 className="text-2xl sm:text-3xl font-black text-white">وقت النقاش</h2>
+        <p className="text-slate-400 text-xs sm:text-sm">ناقشوا.. مين هو الغريب؟</p>
       </div>
 
       {/* Circular timer */}
-      <div className="relative z-10 flex items-center justify-center">
-        <svg width="200" height="200" className="-rotate-90">
+      <div className="relative z-10 flex items-center justify-center my-auto">
+        <svg width="190" height="190" className="-rotate-90">
           {/* Track */}
-          <circle cx="100" cy="100" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
+          <circle cx="95" cy="95" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
           {/* Progress */}
           <circle
-            cx="100" cy="100" r={R} fill="none"
+            cx="95" cy="95" r={R} fill="none"
             stroke={isDanger ? '#F43F5E' : '#7C3AED'}
             strokeWidth="8"
             strokeLinecap="round"
@@ -90,7 +90,7 @@ export default function TimerScreen() {
       <div className="relative z-10 w-full flex flex-col gap-3">
         <button
           onClick={() => router.push('/vote')}
-          className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base transition-transform"
+          className="btn-primary shimmer w-full py-3.5 sm:py-4 rounded-2xl text-white font-bold text-base transition-transform"
         >
           انتهى النقاش — الانتقال للتصويت
         </button>

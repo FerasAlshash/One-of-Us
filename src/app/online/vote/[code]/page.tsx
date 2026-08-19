@@ -138,21 +138,21 @@ export default function OnlineVotePage() {
   const totalVotes = Object.values(voteCounts).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="flex flex-col flex-1 relative overflow-hidden">
+    <div className="flex flex-col flex-1 h-full min-h-0 relative overflow-hidden">
 
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center gap-2 pt-12 pb-4 text-center px-6">
-        <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-violet-300 shadow-inner">
-          <Vote className="w-7 h-7" />
+      <div className="relative z-10 flex flex-col items-center gap-1.5 pt-4 sm:pt-6 pb-2 text-center px-6 safe-top">
+        <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-violet-300 shadow-inner">
+          <Vote className="w-6 h-6" />
         </div>
-        <h1 className="text-xl font-black text-white">التصويت المباشر</h1>
+        <h1 className="text-lg sm:text-xl font-black text-white">التصويت المباشر</h1>
         <p className="text-slate-400 text-xs">
           {hasVoted ? 'تم تسجيل صوتك بنجاح — بانتظار بقية اللاعبين' : 'اختر اللاعب الذي تشك أنه الغريب'}
         </p>
       </div>
 
       {/* Players to vote on */}
-      <div className="relative z-10 flex-1 flex flex-col px-6 gap-2 overflow-y-auto pb-4">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col px-5 sm:px-6 gap-2 overflow-y-auto pb-2">
         {players.map(p => {
           const count = voteCounts[p.id] ?? 0;
           const pct = players.length > 0 ? (count / players.length) * 100 : 0;
@@ -164,7 +164,7 @@ export default function OnlineVotePage() {
               key={p.id}
               onClick={() => { if (!hasVoted && !isMe) setSelected(p.id); }}
               disabled={hasVoted || isMe}
-              className={`glass-card rounded-[20px] px-4 py-3 flex items-center gap-3 transition-all relative overflow-hidden text-right active:scale-[0.98]
+              className={`glass-card rounded-[20px] px-3.5 py-2.5 sm:py-3 flex items-center gap-3 transition-all relative overflow-hidden text-right active:scale-[0.98]
                 ${isSelected && !hasVoted ? 'border-violet-500/50 bg-violet-500/10' : ''}
                 ${hasVoted && selected === p.id ? 'border-violet-500/30 bg-violet-500/5' : ''}
                 ${isMe ? 'opacity-40 cursor-not-allowed' : 'hover:bg-white/[0.04]'}
@@ -177,18 +177,18 @@ export default function OnlineVotePage() {
                   style={{ width: `${pct}%` }}
                 />
               )}
-              <div className="relative w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+              <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0">
                 {p.name[0]}
               </div>
               <div className="relative flex-1 text-right">
-                <p className="text-white font-bold text-sm">{p.name}</p>
+                <p className="text-white font-bold text-xs sm:text-sm">{p.name}</p>
                 {isMe && <p className="text-slate-500 text-[10px]">أنت</p>}
               </div>
               {hasVoted && count > 0 && (
                 <span className="relative text-violet-300 font-black text-xs tabular-nums">{count} صوت</span>
               )}
               {!hasVoted && !isMe && (
-                <div className={`relative w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all flex items-center justify-center ${isSelected ? 'border-violet-500 bg-violet-500' : 'border-white/20'}`}>
+                <div className={`relative w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex-shrink-0 transition-all flex items-center justify-center ${isSelected ? 'border-violet-500 bg-violet-500' : 'border-white/20'}`}>
                   {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </div>
               )}
@@ -207,18 +207,18 @@ export default function OnlineVotePage() {
       )}
 
       {/* CTA */}
-      <div className="relative z-10 px-6 pb-8 pt-2">
+      <div className="relative z-10 px-5 sm:px-6 pb-4 sm:pb-6 pt-2 safe-bottom">
         {!hasVoted ? (
           <button
             onClick={handleVote}
             disabled={!selected}
-            className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform disabled:opacity-40"
+            className="btn-primary shimmer w-full py-3.5 sm:py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform disabled:opacity-40"
           >
             <span>تأكيد صوتي</span>
             <Check className="w-4 h-4" />
           </button>
         ) : (
-          <div className="glass-card rounded-2xl py-3.5 px-6 text-center">
+          <div className="glass-card rounded-2xl py-3 px-5 text-center">
             <p className="text-slate-300 text-xs font-medium">صوتك مسجّل — جاري احتساب الأصوات فور اكتمالها</p>
           </div>
         )}

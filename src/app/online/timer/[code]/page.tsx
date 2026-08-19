@@ -83,11 +83,12 @@ export default function OnlineTimerPage() {
 
   const totalSeconds = (room?.settings.timerMinutes ?? 3) * 60;
   const progress = Math.max(0, Math.min(1, seconds / totalSeconds));
-  const circumference = 2 * Math.PI * 90;
+  const R = 80;
+  const circumference = 2 * Math.PI * R;
   const strokeDash = circumference * progress;
 
   return (
-    <div className={`flex flex-col flex-1 relative overflow-hidden transition-colors duration-1000`}>
+    <div className={`flex flex-col flex-1 h-full min-h-0 relative overflow-hidden transition-colors duration-1000`}>
 
       {/* Floating Emojis Background */}
       {room && <FloatingEmojis categoryId={room.settings.category} />}
@@ -98,19 +99,18 @@ export default function OnlineTimerPage() {
       </div>
 
       {/* Header */}
-      {/* Header */}
-      <div className="relative z-10 flex flex-col items-center pt-12 pb-4 gap-1 text-center">
+      <div className="relative z-10 flex flex-col items-center pt-4 sm:pt-6 pb-2 gap-0.5 text-center safe-top">
         <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">وقت النقاش المباشر</span>
-        <h1 className="text-xl font-black text-white">ناقشوا واكشفوا الغريب!</h1>
+        <h1 className="text-lg sm:text-xl font-black text-white">ناقشوا واكشفوا الغريب!</h1>
       </div>
 
       {/* Timer circle */}
-      <div className="relative z-10 flex-1 flex items-center justify-center">
+      <div className="relative z-10 flex-1 min-h-0 flex items-center justify-center">
         <div className="relative">
-          <svg width="220" height="220" className="-rotate-90">
-            <circle cx="110" cy="110" r="90" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+          <svg width="200" height="200" className="-rotate-90">
+            <circle cx="100" cy="100" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
             <circle
-              cx="110" cy="110" r="90" fill="none"
+              cx="100" cy="100" r={R} fill="none"
               stroke={isDanger ? '#F43F5E' : '#7C3AED'}
               strokeWidth="8" strokeLinecap="round"
               strokeDasharray={`${strokeDash} ${circumference}`}
@@ -118,7 +118,7 @@ export default function OnlineTimerPage() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-            <span className={`text-5xl font-black tabular-nums transition-colors duration-500 font-mono tracking-tight ${isDanger ? 'text-rose-400' : 'text-white'}`}>
+            <span className={`text-4xl sm:text-5xl font-black tabular-nums transition-colors duration-500 font-mono tracking-tight ${isDanger ? 'text-rose-400' : 'text-white'}`}>
               {formatTime(seconds)}
             </span>
             <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">
@@ -129,11 +129,11 @@ export default function OnlineTimerPage() {
       </div>
 
       {/* Bottom hint */}
-      <div className="relative z-10 px-6 pb-10 flex flex-col gap-2">
-        <div className="glass-card rounded-[20px] py-3 px-5 text-center">
+      <div className="relative z-10 px-5 sm:px-6 pb-4 sm:pb-6 safe-bottom flex flex-col gap-2">
+        <div className="glass-card rounded-[20px] py-2.5 px-4 text-center">
           <p className="text-slate-300 text-xs font-medium">ناقشوا بهدوء وذكاء — لا تكشفوا الكلمة صراحة</p>
         </div>
-        <p className="text-center text-slate-500 text-[11px]">
+        <p className="text-center text-slate-500 text-[10px] sm:text-[11px]">
           الانتقال التلقائي لصفحة التصويت فور انتهاء العداد
         </p>
       </div>

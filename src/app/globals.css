@@ -92,6 +92,14 @@
   .shimmer:hover::after,
   .shimmer:focus-visible::after { transform: translateX(100%); }
 
+  /* ── Mobile Safe Area & Layout Utilities ── */
+  .safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  .safe-bottom {
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+
   /* ── Float animation for icons ── */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }

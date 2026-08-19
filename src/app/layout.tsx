@@ -12,7 +12,12 @@ const font = Tajawal({
 import type { Viewport } from 'next';
 
 export const viewport: Viewport = {
-  themeColor: '#8B5CF6',
+  themeColor: '#07080F',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -28,8 +33,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${font.className} bg-[#07080F] text-slate-100 min-h-screen overflow-x-hidden antialiased`}>
+    <html lang="ar" dir="rtl" className="h-full" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${font.className} bg-[#07080F] text-slate-100 h-[100dvh] sm:min-h-screen overflow-hidden sm:overflow-auto antialiased`}>
 
         {/* ── Global ambient layer ── */}
         <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -42,19 +47,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         {/* ── Phone frame ── */}
-        <div className="relative z-10 flex min-h-screen items-center justify-center">
+        <div className="relative z-10 flex h-[100dvh] sm:min-h-screen items-center justify-center sm:p-4">
           <main
             className="
               relative flex flex-col
               w-full max-w-[430px]
-              min-h-screen sm:min-h-[812px] sm:max-h-[812px]
-              sm:rounded-[52px] overflow-hidden
+              h-[100dvh] sm:h-[840px] sm:max-h-[92vh]
+              sm:rounded-[44px] overflow-hidden
               glass
               sm:ring-1 sm:ring-white/10
             "
           >
             {/* Top highlight line */}
-            <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-primary-light/60 to-transparent" />
+            <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             <Providers>{children}</Providers>
           </main>
         </div>

@@ -152,14 +152,14 @@ export default function LobbyPage() {
   const currentCat = CATEGORIES[room.settings.category];
 
   return (
-    <div className="flex flex-col flex-1 relative overflow-hidden">
+    <div className="flex flex-col flex-1 h-full min-h-0 relative overflow-hidden">
 
       {/* Header */}
-      <div className="relative z-10 flex flex-col items-center pt-12 pb-3 px-6 gap-1 text-center">
+      <div className="relative z-10 flex flex-col items-center pt-4 sm:pt-6 pb-2 px-6 gap-1 text-center safe-top">
         <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">كود الانضمام للغرفة</span>
-        <div className="flex gap-1.5 mt-1.5" dir="ltr">
+        <div className="flex gap-1.5 mt-1" dir="ltr">
           {room.code.split('').map((char, i) => (
-            <span key={i} className="w-10 h-12 rounded-xl bg-white/[0.04] border border-white/[0.1] flex items-center justify-center text-lg font-black text-white shadow-inner">
+            <span key={i} className="w-9 h-11 sm:w-10 sm:h-12 rounded-xl bg-white/[0.04] border border-white/[0.1] flex items-center justify-center text-base sm:text-lg font-black text-white shadow-inner">
               {char}
             </span>
           ))}
@@ -174,7 +174,7 @@ export default function LobbyPage() {
                alert('تم نسخ رابط الدعوة!');
              }
           }}
-          className="mt-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-violet-300 text-xs font-semibold flex items-center gap-1.5 transition-colors active:scale-95"
+          className="mt-1.5 px-3.5 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-violet-300 text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition-colors active:scale-95"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -184,8 +184,8 @@ export default function LobbyPage() {
       </div>
 
       {/* Settings summary */}
-      <div className="relative z-10 px-5 mb-3">
-        <div className="glass-card rounded-[18px] px-4 py-2.5 flex items-center justify-between text-xs text-slate-300 font-medium">
+      <div className="relative z-10 px-5 mb-2">
+        <div className="glass-card rounded-[18px] px-3.5 py-2 flex items-center justify-between text-[11px] text-slate-300 font-medium">
           <span>{room.settings.playersCount} لاعب</span>
           <span className="text-slate-600">·</span>
           <span>{room.settings.spiesCount} غريب</span>
@@ -197,33 +197,33 @@ export default function LobbyPage() {
       </div>
 
       {/* Players list */}
-      <div className="relative z-10 flex-1 flex flex-col px-5 gap-2.5 overflow-y-auto pb-4">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col px-5 gap-2 overflow-y-auto pb-2">
         <div className="flex items-center justify-between px-1">
           <p className="text-slate-400 text-xs font-bold">اللاعبون في الغرفة</p>
-          <span className="text-[11px] text-slate-400 bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 rounded-full font-bold">
+          <span className="text-[10px] text-slate-400 bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 rounded-full font-bold">
             {players.length} / {expectedPlayers}
           </span>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {players.map((p, i) => (
             <div key={p.id}
-              className={`glass-card rounded-[16px] px-3.5 py-2.5 flex items-center gap-3 ${p.device_id === deviceId ? 'border-violet-500/30 bg-violet-500/5' : ''}`}
+              className={`glass-card rounded-[16px] px-3 py-2 flex items-center gap-2.5 ${p.device_id === deviceId ? 'border-violet-500/30 bg-violet-500/5' : ''}`}
             >
-              <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-xs font-bold text-slate-300">
+              <div className="w-7 h-7 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-xs font-bold text-slate-300">
                 {i + 1}
               </div>
-              <p className="text-white font-bold text-sm flex-1">{p.name}</p>
+              <p className="text-white font-bold text-xs sm:text-sm flex-1">{p.name}</p>
               {p.device_id === room.host_id && (
-                <span className="text-[10px] bg-violet-500/15 border border-violet-500/30 text-violet-300 px-2 py-0.5 rounded-md font-bold">المستضيف</span>
+                <span className="text-[9px] bg-violet-500/15 border border-violet-500/30 text-violet-300 px-2 py-0.5 rounded-md font-bold">المستضيف</span>
               )}
               {p.device_id === deviceId && p.device_id !== room.host_id && (
-                <span className="text-[10px] text-slate-500 bg-white/[0.03] px-2 py-0.5 rounded-md">أنت</span>
+                <span className="text-[9px] text-slate-500 bg-white/[0.03] px-2 py-0.5 rounded-md">أنت</span>
               )}
               {isHost && p.device_id !== room.host_id && (
                 <button
                   onClick={() => setPlayerToKick(p)}
-                  className="w-7 h-7 flex-shrink-0 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center active:scale-95 transition-all text-xs"
+                  className="w-6 h-6 flex-shrink-0 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center active:scale-95 transition-all text-xs"
                   title="استبعاد اللاعب"
                 >
                   ✕
@@ -234,8 +234,8 @@ export default function LobbyPage() {
 
           {/* Empty slots */}
           {Array.from({ length: Math.max(0, expectedPlayers - players.length) }).map((_, i) => (
-            <div key={`empty-${i}`} className="rounded-[16px] px-3.5 py-2.5 flex items-center gap-3 opacity-35 border border-dashed border-white/10">
-              <div className="w-8 h-8 rounded-lg bg-white/[0.03] flex items-center justify-center text-xs text-slate-500">
+            <div key={`empty-${i}`} className="rounded-[16px] px-3 py-2 flex items-center gap-2.5 opacity-35 border border-dashed border-white/10">
+              <div className="w-7 h-7 rounded-lg bg-white/[0.03] flex items-center justify-center text-xs text-slate-500">
                 {players.length + i + 1}
               </div>
               <p className="text-slate-500 text-xs">بانتظار انضمام لاعب...</p>
@@ -244,23 +244,23 @@ export default function LobbyPage() {
         </div>
 
         {error && (
-          <p className="text-center text-rose-300 text-xs bg-rose-500/10 border border-rose-500/20 rounded-xl px-3 py-2.5">{error}</p>
+          <p className="text-center text-rose-300 text-xs bg-rose-500/10 border border-rose-500/20 rounded-xl px-3 py-2">{error}</p>
         )}
       </div>
 
       {/* CTA — host only */}
-      <div className="relative z-10 px-5 pb-8 pt-3">
+      <div className="relative z-10 px-5 pb-4 sm:pb-6 pt-2 safe-bottom">
         {isHost ? (
           <button
             onClick={handleStart}
             disabled={starting || !canStart}
-            className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base transition-transform disabled:opacity-40"
+            className="btn-primary shimmer w-full py-3.5 sm:py-4 rounded-2xl text-white font-bold text-base transition-transform disabled:opacity-40"
           >
             {starting ? 'جاري بدء اللعبة...' : 'ابدأ اللعبة وتوزيع الأدوار'}
           </button>
         ) : (
-          <div className="glass-card rounded-2xl py-3.5 px-5 text-center">
-            <p className="text-slate-400 text-xs font-medium">في انتظار المستضيف لبدء اللعبة...</p>
+          <div className="glass-card rounded-2xl py-3 px-5 text-center">
+            <p className="text-slate-300 text-xs font-medium">في انتظار المستضيف لبدء اللعبة...</p>
           </div>
         )}
       </div>

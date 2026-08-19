@@ -103,15 +103,15 @@ export default function OnlineResultsPage() {
   const teamWon = !isTie && eliminated.some(p => p.role === 'spy');
 
   return (
-    <div className="flex flex-col flex-1 relative overflow-hidden">
+    <div className="flex flex-col flex-1 h-full min-h-0 relative overflow-hidden">
 
       {/* Hero */}
-      <div className="relative z-10 flex flex-col items-center pt-12 pb-4 px-6 gap-2 text-center">
-        <div className="float relative w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+      <div className="relative z-10 flex flex-col items-center pt-4 sm:pt-6 pb-2 px-6 gap-1.5 text-center safe-top">
+        <div className="float relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
           <Image src="/gharib-logo-v2.png" alt="الغريب" fill sizes="96px" className="object-cover rounded-full" priority />
         </div>
         <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">انكشفت النتيجة</span>
-        <h1 className="text-2xl font-black text-white">
+        <h1 className="text-xl sm:text-2xl font-black text-white">
           {teamWon ? 'فوز الفريق' : 'فوز الغريب'}
         </h1>
         <p className="text-slate-400 text-xs">
@@ -123,20 +123,20 @@ export default function OnlineResultsPage() {
         </p>
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col px-6 gap-3 pb-6 overflow-y-auto">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col px-5 sm:px-6 gap-3 pb-4 sm:pb-6 safe-bottom overflow-y-auto">
 
         {/* Who was eliminated */}
         {eliminated.length > 0 && (
-          <div className="glass-card rounded-[22px] px-4 py-3.5 flex flex-col gap-2">
+          <div className="glass-card rounded-[22px] px-4 py-3 flex flex-col gap-2">
             <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">المشتبه به الأكثر تصويتاً</span>
             {eliminated.map(p => (
-              <div key={p.id} className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] rounded-xl p-2.5">
-                <div className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-sm font-black text-white">
+              <div key={p.id} className="flex items-center gap-2.5 bg-white/[0.02] border border-white/[0.05] rounded-xl p-2">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-xs sm:text-sm font-black text-white">
                   {p.name[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="text-white font-bold text-sm">{p.name}</p>
-                  <p className={`text-[11px] font-semibold mt-0.5 ${p.role === 'spy' ? 'text-violet-300' : 'text-rose-400'}`}>
+                  <p className="text-white font-bold text-xs sm:text-sm">{p.name}</p>
+                  <p className={`text-[10px] sm:text-[11px] font-semibold mt-0.5 ${p.role === 'spy' ? 'text-violet-300' : 'text-rose-400'}`}>
                     {p.role === 'spy' ? 'هو الغريب — أصاب الفريق!' : 'بريء — أخطأ الفريق!'}
                   </p>
                 </div>
@@ -147,35 +147,35 @@ export default function OnlineResultsPage() {
         )}
 
         {/* The Strangers */}
-        <div className="glass-card rounded-[22px] px-4 py-3.5 flex flex-col gap-2">
+        <div className="glass-card rounded-[22px] px-4 py-3 flex flex-col gap-2">
           <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
             {spies.length > 1 ? 'الغرباء في الجولة' : 'الغريب الحقيقي'}
           </span>
           {spies.map(p => (
-            <div key={p.id} className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] rounded-xl p-2.5">
-              <div className="w-9 h-9 rounded-lg bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-sm font-black text-rose-300">
+            <div key={p.id} className="flex items-center gap-2.5 bg-white/[0.02] border border-white/[0.05] rounded-xl p-2">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-xs sm:text-sm font-black text-rose-300">
                 {p.name[0]}
               </div>
-              <p className="text-white font-bold text-sm flex-1">{p.name}</p>
-              <span className="text-[10px] bg-rose-500/10 border border-rose-500/20 text-rose-300 px-2 py-0.5 rounded-md font-bold">غريب</span>
+              <p className="text-white font-bold text-xs sm:text-sm flex-1">{p.name}</p>
+              <span className="text-[9px] sm:text-[10px] bg-rose-500/10 border border-rose-500/20 text-rose-300 px-2 py-0.5 rounded-md font-bold">غريب</span>
             </div>
           ))}
         </div>
 
         {/* Word reveal */}
-        <div className="glass-card rounded-[22px] py-4 px-5 flex flex-col items-center gap-1 text-center">
-          <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
+        <div className="glass-card rounded-[22px] py-3.5 px-5 flex flex-col items-center gap-1 text-center">
+          <div className="flex items-center gap-1.5 text-slate-400 text-[11px] font-bold">
             <KeyRound className="w-3.5 h-3.5 text-violet-300" />
             <span>الكلمة السرية</span>
           </div>
-          <p className="text-3xl font-black text-white mt-0.5">
+          <p className="text-2xl sm:text-3xl font-black text-white">
             {room.word}
           </p>
-          <span className="text-slate-500 text-[11px] font-medium">{CATEGORY_NAMES[room.settings.category] ?? room.settings.category}</span>
+          <span className="text-slate-500 text-[10px] sm:text-[11px] font-medium">{CATEGORY_NAMES[room.settings.category] ?? room.settings.category}</span>
         </div>
 
         {/* All players votes */}
-        <div className="glass-card rounded-[22px] px-4 py-3.5 flex flex-col gap-2">
+        <div className="glass-card rounded-[22px] px-4 py-3 flex flex-col gap-1.5">
           <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">توزيع أصوات اللاعبين</span>
           {players
             .sort((a, b) => (voteTally[b.id] ?? 0) - (voteTally[a.id] ?? 0))
@@ -191,20 +191,20 @@ export default function OnlineResultsPage() {
         </div>
 
         {/* Reset: go back home */}
-        <div className="flex flex-col gap-2.5 mt-auto">
+        <div className="flex flex-col gap-2 mt-auto pt-2">
           {isHost ? (
             <>
               <button
                 onClick={handlePlayAgain}
                 disabled={restarting}
-                className="btn-primary shimmer w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition-transform disabled:opacity-50"
+                className="btn-primary shimmer w-full py-3.5 sm:py-4 rounded-2xl text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-transform disabled:opacity-50"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>{restarting ? 'جاري التجهيز...' : 'بدء جولة جديدة'}</span>
               </button>
               <button
                 onClick={() => router.push('/create-room')}
-                className="w-full py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 font-bold text-sm flex items-center justify-center gap-2 active:scale-98 transition-all"
+                className="w-full py-2.5 sm:py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-all"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>إنشاء غرفة جديدة</span>
@@ -212,7 +212,7 @@ export default function OnlineResultsPage() {
             </>
           ) : (
             <>
-              <div className="glass-card rounded-2xl py-3.5 px-5 text-center">
+              <div className="glass-card rounded-2xl py-3 px-5 text-center">
                 <p className="text-slate-300 text-xs font-medium">في انتظار المستضيف لتجهيز جولة جديدة...</p>
               </div>
               <button
